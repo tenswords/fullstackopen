@@ -9,10 +9,10 @@ sequenceDiagram
 
     Note right of Browser: Browser stores new note in notes and redraws the note list on page
 
-    Browser->>Server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
     Note right of Browser: Note and timestamp are sent as JSON data
+    Browser->>Server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
     activate Server
-    Server-->>Browser: 201 created 
+    Server-->>Browser: 201 created
     deactivate Server
-    
+
 ```
