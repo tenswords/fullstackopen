@@ -1,6 +1,17 @@
+import './App.css'
+
 const Header = ({ course }) => <h1>{course}</h1>
 
-const Total = ({ sum }) => <p>Number of exercises {sum}</p>
+const Total = ({ parts }) => {
+  const total = parts.reduce((sum, part) =>
+    sum + part.exercises, 0)
+
+  return (
+    <div id="total">
+      Total of {total} exercises
+    </div>
+  )
+}
 
 const Part = ({ part }) => 
   <p>
@@ -8,17 +19,18 @@ const Part = ({ part }) =>
   </p>
 
 const Content = ({ content }) => 
-  <>
+  <div>
     {content.map(part => 
       <Part key={part.id} part={part} />
     )}
-  </>
+  </div>
 
 const Course = ({course}) => {
   return (
     <div>
       <Header course={course.name} />
       <Content content={course.parts} />
+      <Total parts={course.parts} />
     </div>
   )
 }
@@ -43,11 +55,11 @@ const App = () => {
         exercises: 14,
         id: 3
       },
-      // {
-      //   name: 'Test',
-      //   exercises: 12,
-      //   id: 4
-      // }
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
+      }
     ]
   }
 
