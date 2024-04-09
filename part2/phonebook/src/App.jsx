@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import NumberList from "./components/NumberList"
+import Persons from "./components/Persons"
+import Filter from "./components/Filter"
+import PersonForm from "./components/PersonForm"
 import "./App.css"
 
 const App = () => {
@@ -11,24 +13,32 @@ const App = () => {
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ])
 
-  // State
+  // States
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
-  const [filteredList,  setFilteredList] = useState(persons)
+  const [filteredList, setFilteredList] = useState(persons)
 
   // Handlers
   const handleSearch = (e) => {
     setFilteredList(persons.filter( (person) =>
-      person.name.toLowerCase().includes(e.target.value.toLowerCase())))
-    setSearchTerm(e.target.value)
-  }
+      person.name.toLowerCase().includes(
+        e.target.value.toLowerCase())))
+      setSearchTerm(e.target.value)
+    }
 
-  const addPerson = (event) => {
-    event.preventDefault()
+  const handleNameChange = (e) => 
+    setNewName(e.target.value)
+
+  const handleNumberChange = (e) =>
+    setNewNumber(e.target.value)
+
+  const addPerson = (e) => {
+    e.preventDefault()
     const newPerson = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: persons.length + 1
     }
     
     if (persons.some( (x) => x.name === newName ))
@@ -44,28 +54,16 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-        <div>
-          Filter shown with: <input value={searchTerm} onChange={
-            e => handleSearch(e)
-          } />
-        </div>
-      <h2>Add new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          Name: <input value={newName} onChange={
-            e => setNewName(e.target.value)
-          } />
-        </div>
-        <div>
-          Number: <input value={newNumber} onChange={
-            e => setNewNumber(e.target.value)
-          } />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-          <NumberList list={filteredList} />
+      <Filter value={searchTerm} onChange={handleSearch} />
+      <h3>Add a new</h3>
+      <PersonForm 
+        newName={newName} 
+        nameHandler={handleNameChange} 
+        newNumber={newNumber} 
+        numberHandler={handleNumberChange} 
+        onSubmit={addPerson} />
+      <h3>Numbers</h3>
+      <Persons list={searchTerm === '' ? persons : filteredList} />
     </div>
   )
 }
