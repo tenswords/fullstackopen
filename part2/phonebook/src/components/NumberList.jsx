@@ -1,5 +1,5 @@
 const NumberLine = ({entry}) =>
-  <li>{entry.name}</li>
+  <li>{entry.name} {entry.number}</li>
 
 const NumberList = ({list}) => 
   <div>
