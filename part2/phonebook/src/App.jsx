@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from "axios"
 import Persons from "./components/Persons"
 import Filter from "./components/Filter"
 import PersonForm from "./components/PersonForm"
+import personService from './services/persons'
 import "./App.css"
 
 const App = () => {
@@ -13,17 +13,17 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredList, setFilteredList] = useState(persons)
 
-  useEffect( () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then( response => {
-        setPersons(response.data)
+  useEffect(() => {
+    personService
+      .getAll()
+      .then( initialPersons => {
+        setPersons(initialPersons)
       })
   } ,[] )
 
   // Handlers
   const handleSearch = (e) => {
-    setFilteredList(persons.filter( (person) =>
+    setFilteredList(persons.filter((person) =>
       person.name.toLowerCase().includes(
         e.target.value.toLowerCase())))
       setSearchTerm(e.target.value)
@@ -42,13 +42,13 @@ const App = () => {
       number: newNumber,
     }
     
-    if (persons.some( (x) => x.name === newName ))
+    if (persons.some((x) => x.name === newName))
       alert(`${newName} is already added to the phonebook`)
     else {
-      axios
-        .post('http://localhost:3001/persons', newPerson)
-        .then( response => { 
-        setPersons(persons.concat(response.data))
+      personService
+        .create(newPerson)
+        .then(returnedPerson => { 
+        setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
         })
