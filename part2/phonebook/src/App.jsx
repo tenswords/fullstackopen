@@ -13,7 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredList, setFilteredList] = useState(persons)
-  const [statusMsg, setStatusMsg] = useState(null)
+  const [status, setStatus] = useState(null)
 
   useEffect(() => {
     personService
@@ -38,10 +38,10 @@ const App = () => {
   const handleNumberChange = (e) =>
     setNewNumber(e.target.value)
 
-  const handleStatusMsg = (msg) => {
-    setStatusMsg(msg)
+  const handleStatus = (status) => {
+    setStatus(status)
     setTimeout(() => {
-      setStatusMsg(null)
+      setStatus(null)
     }, 5000)
   }
 
@@ -69,7 +69,7 @@ const App = () => {
               }))
               setNewName('')
               setNewNumber('')
-              handleStatusMsg(`${newPerson.name}'s number has been changed`)
+              handleStatus({msg: `${newPerson.name}'s number has been changed`, isError: false})
             })
         }
     } else {
@@ -79,7 +79,7 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
-          handleStatusMsg(`Added ${newPerson.name}`)
+          handleStatus({msg: `Added ${newPerson.name}`, isError: false})
         })
     }
   }
@@ -88,9 +88,11 @@ const App = () => {
     if (confirm(`Delete ${delPerson.name}?`)) {
       personService
       .remove(delPerson.id)
-      .then(() => {
-        setPersons(persons.filter( person => person.id !== delPerson.id))
-        })
+      .catch( () => {
+        handleStatus({msg:`${delPerson.name} has already been removed from server`, 
+          isError: true})
+      })
+      setPersons(persons.filter(person => person.id !== delPerson.id))
     }
   }
 
@@ -98,7 +100,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification msg={statusMsg} />
+      <Notification status={status} />
       <Filter value={searchTerm} onChange={handleSearch} />
       <h3>Add a new</h3>
       <PersonForm 
