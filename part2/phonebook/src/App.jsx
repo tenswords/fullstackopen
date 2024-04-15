@@ -19,13 +19,14 @@ const App = () => {
       .then(initialPersons => {
         setPersons(initialPersons)
       })
-  } ,[] )
+  } , [])
 
   // Handlers
   const handleSearch = (e) => {
-    setFilteredList(persons.filter((person) =>
+    setFilteredList(persons.filter(person =>
       person.name.toLowerCase().includes(
-        e.target.value.toLowerCase())))
+        e.target.value.toLowerCase()
+      )))
       setSearchTerm(e.target.value)
     }
 
@@ -55,6 +56,19 @@ const App = () => {
     }
   }
 
+  const removePerson = (delPerson) => {
+    if (confirm(`Delete ${delPerson.name}?`)) {
+      personService
+      .remove(delPerson.id)
+      .then(() => {
+        setPersons(persons.filter( person => person.id !== delPerson.id))
+        })
+        alert(`${delPerson.name} deleted from phonebook.`)
+    } else {
+      alert(`${delPerson.name} was not deleted from phonebook.`)
+    }
+  }
+
   // App
   return (
     <div>
@@ -68,7 +82,9 @@ const App = () => {
         numberHandler={handleNumberChange} 
         onSubmit={addPerson} />
       <h3>Numbers</h3>
-      <Persons list={searchTerm === '' ? persons : filteredList} />
+      <Persons 
+        list={searchTerm === '' ? persons : filteredList} 
+        removeHandler={removePerson} />
     </div>
   )
 }
