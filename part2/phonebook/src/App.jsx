@@ -3,6 +3,7 @@ import Persons from "./components/Persons"
 import Filter from "./components/Filter"
 import PersonForm from "./components/PersonForm"
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   // States
