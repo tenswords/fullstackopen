@@ -3,6 +3,7 @@ import Persons from "./components/Persons"
 import Filter from "./components/Filter"
 import PersonForm from "./components/PersonForm"
 import personService from './services/persons'
+import Notification from './components/Notification'
 import "./App.css"
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredList, setFilteredList] = useState(persons)
+  const [statusMsg, setStatusMsg] = useState(null)
 
   useEffect(() => {
     personService
@@ -36,6 +38,13 @@ const App = () => {
   const handleNumberChange = (e) =>
     setNewNumber(e.target.value)
 
+  const handleStatusMsg = (msg) => {
+    setStatusMsg(msg)
+    setTimeout(() => {
+      setStatusMsg(null)
+    }, 5000)
+  }
+
   const addPerson = (e) => {
     e.preventDefault()
     const newPerson = { 
@@ -52,14 +61,15 @@ const App = () => {
           personService
             .update(changedPerson)
             .then(returnedPerson => {
-              setPersons(persons.map(origPerson => {
-                if (returnedPerson.id === origPerson.id)
+              setPersons(persons.map(origPerson => { 
+				        if (returnedPerson.id === origPerson.id)
                   return returnedPerson
                 else
                   return origPerson
               }))
               setNewName('')
               setNewNumber('')
+              handleStatusMsg(`${newPerson.name}'s number has been changed`)
             })
         }
     } else {
@@ -69,6 +79,7 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+          handleStatusMsg(`Added ${newPerson.name}`)
         })
     }
   }
@@ -87,6 +98,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification msg={statusMsg} />
       <Filter value={searchTerm} onChange={handleSearch} />
       <h3>Add a new</h3>
       <PersonForm 
