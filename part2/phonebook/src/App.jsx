@@ -7,7 +7,7 @@ import Notification from './components/Notification'
 
 const App = () => {
   // States
-  const [persons, setPersons] = useState([])
+  const [persons, setPersons] = useState(null)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
@@ -21,6 +21,10 @@ const App = () => {
         setPersons(initialPersons)
       })
   } , [])
+
+  if (!persons) {
+    return null
+  }
 
   // Handlers
   const handleSearch = (e) => {
