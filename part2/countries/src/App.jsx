@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
-import CountriesList from './components/CountryDisplay'
+import CountryDisplay from './components/CountryDisplay'
 import countryService from './services/countries'
 
 function App() {
@@ -24,10 +24,14 @@ function App() {
     setSearchTerm(e.target.value)
   }
 
+  const showHandler = (country) => {
+    setFilteredList([country])
+  }
+
   return (
     <>
       <Filter value={searchTerm} onChange={handleSearch} />
-      <CountriesList searchTerm={searchTerm} list={filteredList} />
+      <CountryDisplay searchTerm={searchTerm} list={filteredList} showHandler={showHandler} />
     </>
   )
 }

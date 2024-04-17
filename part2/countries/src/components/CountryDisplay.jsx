@@ -1,7 +1,7 @@
 import CountryList from './CountryList'
 import CountryDetails from './CountryDetails'
 
-const CountryDisplay = ({searchTerm, list}) => {
+const CountryDisplay = ({searchTerm, list, showHandler}) => {
   if (!list || searchTerm == '') {
     return (' ')
   }
@@ -19,7 +19,7 @@ const CountryDisplay = ({searchTerm, list}) => {
   }
   
   return (
-    <CountryList list={list} />
+    <CountryList list={list} showHandler={showHandler} />
   )  
 }
 
