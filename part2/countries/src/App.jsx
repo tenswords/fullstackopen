@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import CountryDisplay from './components/CountryDisplay'
-import countryService from './services/countries'
+import countryService from './services/countries.js'
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [fullList, setFullList] = useState(null)
   const [filteredList, setFilteredList] = useState(null)
 
-  useEffect( () => {
+  useEffect(() => {
     countryService
       .getAll()
-      .then(fullList => {
+      .then(fullList => 
         setFullList(fullList)
-      })
+      )
   }, [])
 
-  const handleSearch = (e) => {
+  const handleSearch = e => {
     setFilteredList(fullList.filter(country => 
       country.name.common.toLowerCase().startsWith(
         e.target.value.toLowerCase()
@@ -24,15 +24,19 @@ function App() {
     setSearchTerm(e.target.value)
   }
 
-  const showHandler = (country) => {
+  const showHandler = country => {
     setFilteredList([country])
   }
 
   return (
-    <>
-      <Filter value={searchTerm} onChange={handleSearch} />
-      <CountryDisplay searchTerm={searchTerm} list={filteredList} showHandler={showHandler} />
-    </>
+    <div>
+      <Filter value={searchTerm} 
+        onChange={handleSearch} />
+      <CountryDisplay 
+        searchTerm={searchTerm} 
+        list={filteredList}
+        showHandler={showHandler} />
+    </div>
   )
 }
 

@@ -6,6 +6,7 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
+// not used but good to have
 const getOne = name => {
   const request = axios.get(`${baseUrl}/${name}`)
   return request.then(response => response.data) 
